@@ -12,9 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-tags: true
       - run: |
+          git fetch --tags
           latest=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
           major=$(echo $latest | cut -d. -f1)
           minor=$(echo $latest | cut -d. -f2)
