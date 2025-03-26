@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: |
+          git fetch --tags
           latest=$(git tag -l --sort=-v:refname | head -n 1 || echo "0.0.0")
           major=$(echo $latest | cut -d. -f1)
           minor=$(echo $latest | cut -d. -f2)
