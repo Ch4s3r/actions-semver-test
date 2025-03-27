@@ -14,9 +14,9 @@ jobs:
       - uses: actions/checkout@v4
       - run: |
           git fetch --tags
-          latest=$(git tag -l --sort=-v:refname | head -n 1 || echo "0.0.0")
+          latest=$(git tag -l --sort=-v:refname | head -n 1 || echo "0.0.0-SNAPSHOT")
           major=$(echo $latest | cut -d. -f1)
           minor=$(echo $latest | cut -d. -f2)
-          new_tag="$major.$((minor+1)).0"
+          new_tag="$major.$((minor+1)).0-SNAPSHOT"
           git tag $new_tag
           git push origin $new_tag
