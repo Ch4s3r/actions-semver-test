@@ -12,11 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      - name: Bump minor version
+        run: |
           git fetch --tags
           latest=$(git tag -l --sort=-v:refname | head -n 1 || echo "0.0.0")
           major=$(echo $latest | cut -d. -f1)
           minor=$(echo $latest | cut -d. -f2)
-          new_tag="$major.$((minor+1)).0-SNAPSHOT"
+          new_tag="$major.$((minor+1)).0"
           git tag $new_tag
           git push origin $new_tag
