@@ -2,7 +2,8 @@ name: Auto Tag
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
 
 permissions:
   contents: write
@@ -12,13 +13,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Bump minor version
-        run: |
-          git fetch --tags
-          latest=$(git tag -l "release/*" --sort=-v:refname | head -n 1 | sed 's/release\///')
-          latest=${latest:-0.0.0}
-          major=$(echo $latest | cut -d. -f1)
-          minor=$(echo $latest | cut -d. -f2)
-          new_tag="release/$major.$((minor+1)).0"
-          git tag $new_tag
-          git push origin $new_tag
+      - name: Run Bumpy
+        uses: docker://docker.io/ch4s3r/bumpy:latest
