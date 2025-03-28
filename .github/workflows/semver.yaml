@@ -2,7 +2,7 @@ name: Auto Tag
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
 
 permissions:
   contents: write
@@ -15,7 +15,7 @@ jobs:
       - name: Bump minor version
         run: |
           git fetch --tags
-          latest=$(git tag -l "release/*" --sort=-v:refname | head -n 1 | sed 's/release\///' || echo "0.0.0")
+          latest=$(git tag -l "release/*" --sort=-v:refname | grep -E '^release/[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 | sed 's/release\///' || echo "0.0.0")
           major=$(echo $latest | cut -d. -f1)
           minor=$(echo $latest | cut -d. -f2)
           new_tag="release/$major.$((minor+1)).0"
