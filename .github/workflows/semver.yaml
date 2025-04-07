@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-#      - name: Run Bumpy
-#        uses: docker://docker.io/ch4s3r/bumpy:latest
+      #      - name: Run Bumpy
+      #        uses: docker://docker.io/ch4s3r/bumpy:latest
       - name: Bump minor version
         run: |
           git fetch --tags
@@ -25,3 +25,22 @@ jobs:
           new_tag="release/$major.$((minor+1)).0"
           git tag $new_tag
           git push origin $new_tag
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: name/app
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
