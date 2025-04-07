@@ -44,7 +44,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: name/app
+          images: ghcr.io/ch4s3r/actions-semver-test
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
