@@ -57,5 +57,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ needs.tag.outputs.new_version }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.tag.outputs.new_version }}
           labels: ${{ steps.meta.outputs.labels }}
