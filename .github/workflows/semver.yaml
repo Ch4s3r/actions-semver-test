@@ -9,7 +9,6 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
-
 jobs:
   tag:
     runs-on: ubuntu-latest
@@ -17,8 +16,6 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      #      - name: Run Bumpy
-      #        uses: docker://docker.io/ch4s3r/bumpy:latest
       - name: Bump minor version
         id: bump_version
         run: |
@@ -30,7 +27,7 @@ jobs:
           new_tag="release/$major.$((minor+1)).0"
           git tag $new_tag
           git push origin $new_tag
-          echo "::set-output name=tag::$new_tag"
+          echo "tag=$new_tag" >> $GITHUB_ENV
   docker:
     runs-on: ubuntu-latest
     needs: tag
@@ -58,5 +55,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ needs.tag.outputs.tag }}
+          tags: ${{ env.tag }}
           labels: ${{ steps.meta.outputs.labels }}
