@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: write
     outputs:
-      new_tag: ${{ steps.bump_version.outputs.new_version }}
+      new_version: ${{ steps.bump_version.outputs.new_version }}
     steps:
       - uses: actions/checkout@v4
       - name: Bump minor version
