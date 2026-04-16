@@ -1,16 +1,24 @@
-name: Test
+name: Install Cypress Dependencies
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
-  test:
+  install-cypress-deps:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Test
-        uses: docker/build-push-action@v6
+      - uses: actions/checkout@v6
+
+      - name: Restore apt cache
+        uses: actions/cache@v5
         with:
-          push: false
+          path: /var/cache/apt/archives
+          key: apt-cypress-${{ hashFiles('.github/workflows/test.yaml') }}
+
+      - name: Install Cypress dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
+
+      - name: List installed apt packages
+        run: apt list --installed
