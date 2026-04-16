@@ -22,21 +22,12 @@ jobs:
           path: ~/apt-cache
           key: apt-cypress-${{ steps.apt-key.outputs.hash }}
 
-      - name: Fix apt cache ownership
-        run: |
-          sudo rm -f ~/apt-cache/lock
-          sudo rm -rf ~/apt-cache/partial
-          sudo chown -R "$(id -u):$(id -g)" ~/apt-cache 2>/dev/null || true
-          mkdir -p ~/apt-cache/partial
-
       - name: Install Cypress dependencies
         run: |
+          sudo rm -rf ~/apt-cache/lock ~/apt-cache/partial
+          mkdir -p ~/apt-cache/partial
           sudo apt-get -y -o Dir::Cache::Archives="$HOME/apt-cache" -o APT::Keep-Downloaded-Packages=true install libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
-
-      - name: Clean apt cache for save
-        run: |
-          sudo rm -f ~/apt-cache/lock
-          sudo rm -rf ~/apt-cache/partial
+          sudo rm -rf ~/apt-cache/lock ~/apt-cache/partial
           sudo chown -R "$(id -u):$(id -g)" ~/apt-cache
 
       - name: List installed apt packages
