@@ -1,14 +1,12 @@
-name: Install Cypress Dependencies
+name: Component tests
 
-on:
-  workflow_dispatch:
+on: push
 
 jobs:
-  install-cypress-deps:
+  cypress-run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: DeterminateSystems/nix-installer-action@v22
-      - uses: DeterminateSystems/magic-nix-cache-action@v13
-      - run: nix profile add nixpkgs#devenv
-      - run: devenv shell -- xvfb-run cypress version
+      - uses: cypress-io/github-action@v7
+        with:
+          component: true
