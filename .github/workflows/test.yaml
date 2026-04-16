@@ -11,4 +11,4 @@ jobs:
       - uses: DeterminateSystems/nix-installer-action@v22
       - uses: DeterminateSystems/magic-nix-cache-action@v13
       - run: nix profile add nixpkgs#devenv
-      - run: devenv shell -- cypress version
+      - run: devenv shell -- xvfb-run cypress version

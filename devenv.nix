@@ -2,6 +2,7 @@
   packages = [
     pkgs.nodejs
     pkgs.cypress
+    pkgs.xvfb-run
   ];
 
   enterShell = ''
