@@ -9,21 +9,23 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
+      - name: Update apt package lists
+        run: sudo apt-get update
+
+      - name: Generate apt cache key
+        id: apt-key
+        run: echo "hash=$(sha256sum /var/lib/apt/lists/*Packages 2>/dev/null | sha256sum | cut -d' ' -f1)" >> "$GITHUB_OUTPUT"
+
       - name: Restore apt cache
         uses: actions/cache@v5
         with:
-          path: /var/cache/apt/archives
-          key: apt-cypress-${{ hashFiles('.github/workflows/test.yaml') }}
+          path: ~/apt-cache
+          key: apt-cypress-${{ steps.apt-key.outputs.hash }}
 
       - name: Install Cypress dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get -y install libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
-
-      - name: Fix apt cache permissions
-        run: |
-          sudo chmod -R a+r /var/cache/apt/archives
-          sudo chmod a+rx /var/cache/apt/archives /var/cache/apt/archives/partial
+          mkdir -p ~/apt-cache/partial
+          sudo apt-get -y -o Dir::Cache::Archives="$HOME/apt-cache" -o APT::Keep-Downloaded-Packages=true install libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
 
       - name: List installed apt packages
         run: apt list --installed
