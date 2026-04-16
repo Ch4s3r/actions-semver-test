@@ -19,17 +19,18 @@ jobs:
       - name: Restore apt cache
         uses: actions/cache@v5
         with:
-          path: ~/apt-debs
+          path: ~/apt-cache
           key: apt-cypress-${{ steps.apt-key.outputs.hash }}
 
       - name: Install Cypress dependencies
         run: |
-          if [ -d ~/apt-debs ]; then
-            sudo cp ~/apt-debs/*.deb /var/cache/apt/archives/ 2>/dev/null || true
+          if [ -d ~/apt-cache ]; then
+            sudo cp ~/apt-cache/*.deb /var/cache/apt/archives/ 2>/dev/null || true
           fi
           sudo apt-get -y install libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb
-          mkdir -p ~/apt-debs
-          cp /var/cache/apt/archives/*.deb ~/apt-debs/ 2>/dev/null || true
+          rm -rf ~/apt-cache
+          mkdir -p ~/apt-cache
+          cp /var/cache/apt/archives/*.deb ~/apt-cache/ 2>/dev/null || true
 
       - name: List installed apt packages
         run: apt list --installed
