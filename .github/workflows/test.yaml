@@ -8,12 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/cache@v5
-        id: apt-cache
-        with:
-          path: ~/apt-cache
-          key: apt-cypress-${{ hashFiles('.github/workflows/test.yaml') }}
-      - if: steps.apt-cache.outputs.cache-hit != 'true'
-        run: |
-          sudo apt-get update && mkdir -p ~/apt-cache/partial && sudo apt-get -y -o Dir::Cache::Archives="$HOME/apt-cache" -o APT::Keep-Downloaded-Packages=true install libgtk-3-0t64 libgbm-dev libnotify-dev libnss3 libxss1 libasound2t64 libxtst6 xauth xvfb && sudo chown -R "$(id -u):$(id -g)" ~/apt-cache
-      - run: apt list --installed
+      - uses: DeterminateSystems/nix-installer-action@v22
+      - uses: DeterminateSystems/magic-nix-cache-action@v13
+      - run: nix profile add nixpkgs#devenv
+      - run: devenv shell -- cypress version
