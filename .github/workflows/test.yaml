@@ -12,5 +12,3 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v13
       - run: nix profile add nixpkgs#devenv
       - run: devenv shell -- cypress version
-        env:
-          ELECTRON_EXTRA_LAUNCH_ARGS: --no-sandbox
